@@ -1,17 +1,46 @@
+# name: test-workflow
+# on:
+#   push:
+#     branches:
+#       - main
+# jobs:
+#   first-job:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Tagging Testing
+#         run: echo "Test tagging!"
+#       - name: Tagging Entity
+#         run: |
+#           curl https://api.newrelic.com/graphql \
+#           -H 'Content-Type: application/json' \
+#           -H 'API-Key: ${{ secrets.NEW_RELIC_API_KEY }}' \
+#           --data-binary '{"query":"mutation {\n  taggingAddTagsToEntity(\n    guid: \"MzYyNzU0MXxJTkZSQXxOQXwzMzk4MTU5MDE3MjkyMzM1MjA0\"\n    tags: {key: \"fev_pet\", values: \"Dogs2 \"}\n  ) {\n    errors {\n      message\n      type\n    }\n  }\n}", "variables":""}'
+
+
 name: test-workflow
+
 on:
   push:
     branches:
       - main
+
 jobs:
-  first-job:
+  tagging-job:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Tagging Testing
         run: echo "Test tagging!"
-      - name: Tagging Entity
+
+      - name: Tagging Multiple Entities from File
         run: |
-          curl https://api.newrelic.com/graphql \
-          -H 'Content-Type: application/json' \
-          -H 'API-Key: ${{ secrets.NEW_RELIC_API_KEY }}' \
-          --data-binary '{"query":"mutation {\n  taggingAddTagsToEntity(\n    guid: \"MzYyNzU0MXxJTkZSQXxOQXwzMzk4MTU5MDE3MjkyMzM1MjA0\"\n    tags: {key: \"fev_pet\", values: \"Dogs2 \"}\n  ) {\n    errors {\n      message\n      type\n    }\n  }\n}", "variables":""}'
+          while IFS= read -r entity; do
+            echo "Tagging $entity"
+            curl https://api.newrelic.com/graphql \
+              -H 'Content-Type: application/json' \
+              -H 'API-Key: ${{ secrets.NEW_RELIC_API_KEY }}' \
+              --data-binary "{\"query\":\"mutation { taggingAddTagsToEntity(guid: \\\"$entity\\\" tags: {key: \\\"fev_pet\\\", values: [\\\"Dogs2\\\"]}) { errors { message type }}}\", \"variables\":\"\"}"
+          done < ../entities.txt
