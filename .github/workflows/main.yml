@@ -4,7 +4,11 @@ jobs:
   first-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Testing code
-        run: echo "Hello world!"
-      - name: Testing code 2
-        run: echo "testing code"
+      - name: Tagging Testing
+        run: echo "Test tagging!"
+      - name: Tagging Entity
+        run: |
+          curl https://api.newrelic.com/graphql \
+          -H 'Content-Type: application/json' \
+          -H 'API-Key: ${{ secrets.NEW_RELIC_API_KEY }}' \
+          --data-binary '{"query":"mutation {\n  taggingAddTagsToEntity(\n    guid: \"MzYyNzU0MXxJTkZSQXxOQXwzMzk4MTU5MDE3MjkyMzM1MjA0\"\n    tags: {key: \"Your_Pet\", values: \"Dog\"}\n  ) {\n    errors {\n      message\n      type\n    }\n  }\n}", "variables":""}'
