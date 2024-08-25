@@ -43,4 +43,4 @@ jobs:
               -H 'Content-Type: application/json' \
               -H 'API-Key: ${{ secrets.NEW_RELIC_API_KEY }}' \
               --data-binary "{\"query\":\"mutation { taggingAddTagsToEntity(guid: \\\"$entity\\\" tags: {key: \\\"fev_pet\\\", values: [\\\"Dogs2\\\"]}) { errors { message type }}}\", \"variables\":\"\"}"
-          done < ./entities.txt
+          done < entities.txt
