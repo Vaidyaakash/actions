@@ -14,4 +14,4 @@ jobs:
           curl https://api.newrelic.com/graphql \
           -H 'Content-Type: application/json' \
           -H 'API-Key: ${{ secrets.NEW_RELIC_API_KEY }}' \
-          --data-binary '{"query":"mutation {\n  taggingAddTagsToEntity(\n    guid: \"MzYyNzU0MXxJTkZSQXxOQXwzMzk4MTU5MDE3MjkyMzM1MjA0\"\n    tags: {key: \"My_Pet\", values: \"Dogs\"}\n  ) {\n    errors {\n      message\n      type\n    }\n  }\n}", "variables":""}'
+          --data-binary '{"query":"mutation {\n  taggingAddTagsToEntity(\n    guid: \"MzYyNzU0MXxJTkZSQXxOQXwzMzk4MTU5MDE3MjkyMzM1MjA0\"\n    tags: {key: \"fev_pet\", values: \"Dogs2\"}\n  ) {\n    errors {\n      message\n      type\n    }\n  }\n}", "variables":""}'
